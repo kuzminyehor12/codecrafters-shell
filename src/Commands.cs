@@ -14,6 +14,6 @@ public class Commands
     public static string[] GetExecutablePaths()
     {
         var pathString = Environment.GetEnvironmentVariable("PATH");
-        return pathString?.Split(';', StringSplitOptions.TrimEntries) ?? [];
+        return pathString?.Split(Path.PathSeparator, StringSplitOptions.TrimEntries) ?? [];
     }
 }

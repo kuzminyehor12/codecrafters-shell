@@ -46,11 +46,11 @@ class Program
 
                             foreach (var filePath in Directory.EnumerateFiles(path))
                             {
-                                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
-                                var extension = Path.GetExtension(filePath);
-                                if (fileNameWithoutExt.Equals(argumentCmd) && extension.Equals(".exe"))
+                                var fileInfo = new FileInfo(filePath);
+                                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileInfo.FullName);
+                                if (fileNameWithoutExt.Equals(argumentCmd) && fileInfo.UnixFileMode == UnixFileMode.UserExecute)
                                 {
-                                    Console.WriteLine($"{argumentCmd} is {Path.GetFullPath(filePath)}");
+                                    Console.WriteLine($"{argumentCmd} is {fileInfo.FullName}");
                                     found = true;
                                     break;
                                 }
