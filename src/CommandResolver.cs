@@ -4,12 +4,19 @@ public class CommandResolver
 {
     public static ICommand? Resolve(string? cmd)
     {
+        var builtInCommand = ResolveBuiltIn(cmd);
+
+        if (builtInCommand is not null)
+        {
+            return builtInCommand;
+        }
+
         if (IsExecutableExists(cmd))
         {
             return new ExecutableCommand(cmd!);    
         }
 
-        return ResolveBuiltIn(cmd);
+        return null;
     }
 
     private static ICommand? ResolveBuiltIn(string? cmd)
@@ -19,6 +26,7 @@ public class CommandResolver
             Commands.EXIT => new ExitCommand(),
             Commands.ECHO => new EchoCommand(),
             Commands.TYPE => new TypeCommand(),
+            Commands.PWD => new PwdCommand(),
             _ => null
         };
     }
