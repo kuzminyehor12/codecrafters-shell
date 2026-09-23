@@ -9,7 +9,7 @@ public class TypeCommand : ICommand
 
         if (builtInCommands.Contains(argumentCmd))
         {
-            Console.WriteLine($"{argumentCmd} is a shell {CommandTypes.BUILT_IN}");
+            Console.WriteLine($"{argumentCmd} is a shell builtin");
         }
         else
         {
