@@ -13,7 +13,6 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
-        Console.WriteLine();
         Process.Start(ExecutablePath, args);
     }
 }
