@@ -18,7 +18,7 @@ public class CdCommand : ICommand
 
             if (!string.IsNullOrWhiteSpace(homeDirectory) && Directory.Exists(homeDirectory))
             {
-                Directory.SetCurrentDirectory(directoryName);
+                Directory.SetCurrentDirectory(homeDirectory);
                 return;
             }
         }
