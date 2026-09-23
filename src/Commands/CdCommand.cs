@@ -6,12 +6,6 @@ public class CdCommand : ICommand
     {
         var directoryName = args.Length > 0 ? args[0] : string.Empty;
 
-        if (!Directory.Exists(directoryName))
-        {
-            Console.WriteLine($"cd: {directoryName}: No such file or directory");
-            return;
-        }
-
         if (directoryName.Equals("~"))
         {
             var homeDirectory = Environment.GetEnvironmentVariable("HOME");
@@ -21,6 +15,12 @@ public class CdCommand : ICommand
                 Directory.SetCurrentDirectory(homeDirectory);
                 return;
             }
+        }
+
+        if (!Directory.Exists(directoryName))
+        {
+            Console.WriteLine($"cd: {directoryName}: No such file or directory");
+            return;
         }
 
         Directory.SetCurrentDirectory(directoryName);
