@@ -1,3 +1,5 @@
+using CodeCrafters.Shell;
+
 class Program
 {
     static void Main()
@@ -6,7 +8,16 @@ class Program
         {    
             Console.Write("$ ");
             var cmd = Console.ReadLine();
-            Console.WriteLine($"{cmd}: command not found");
+
+            switch (cmd)
+            {
+                case Commands.EXIT:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine($"{cmd}: command not found");
+                    break;
+            }
         }
     }
 }
