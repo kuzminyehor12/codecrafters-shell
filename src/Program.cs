@@ -8,6 +8,7 @@ class Program
         while (true)
         {    
             Console.Write("$ ");
+            
             var input = Console.ReadLine();
             var tokens = input?.Split(' ');
 
@@ -15,6 +16,15 @@ class Program
             var args = tokens?.Length > 1 ? tokens[1..] : [string.Empty]; 
 
             var cmd = CommandResolver.Resolve(cmdToken);
+
+            if (cmd is not null)
+            {
+                cmd.Execute(args);
+            }
+            else
+            {
+                Console.WriteLine($"{cmdToken}: command not found");
+            }
         }
     }
 }
