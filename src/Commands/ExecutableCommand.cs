@@ -13,6 +13,6 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
-        Process.Start(ExecutablePath, args);
+        Process.Start(ExecutablePath, args).WaitForExit();
     }
 }
