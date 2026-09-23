@@ -5,7 +5,7 @@ namespace CodeCrafters.Shell;
 public class ExecutableCommand : ICommand
 {
     public string ExecutablePath { get; }
-    
+
     public ExecutableCommand(string executablePath)
     {
         ExecutablePath = executablePath;
@@ -13,6 +13,7 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
+        Console.WriteLine();
         Process.Start(ExecutablePath, args);
     }
 }
