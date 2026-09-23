@@ -27,6 +27,7 @@ public class CommandResolver
             Commands.ECHO => new EchoCommand(),
             Commands.TYPE => new TypeCommand(),
             Commands.PWD => new PwdCommand(),
+            Commands.CD => new CdCommand(),
             _ => null
         };
     }

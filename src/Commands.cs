@@ -6,6 +6,7 @@ public class Commands
     public const string ECHO = "echo";
     public const string TYPE = "type";
     public const string PWD = "pwd";
+    public const string CD = "cd";
 
     public static string[] GetBuiltInCommands()
     {
