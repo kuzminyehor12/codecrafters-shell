@@ -48,7 +48,7 @@ class Program
                             {
                                 var fileInfo = new FileInfo(filePath);
                                 var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileInfo.FullName);
-                                if (fileNameWithoutExt.Equals(argumentCmd) && fileInfo.UnixFileMode == UnixFileMode.UserExecute)
+                                if (fileNameWithoutExt.Equals(argumentCmd) && fileInfo.Extension.Equals(".exe"))
                                 {
                                     Console.WriteLine($"{argumentCmd} is {fileInfo.FullName}");
                                     found = true;
