@@ -6,10 +6,14 @@ public class Commands
     public const string ECHO = "echo";
     public const string TYPE = "type";
 
-    public static IEnumerable<string> GetBuiltInCommands()
+    public static string[] GetBuiltInCommands()
     {
-        yield return EXIT;
-        yield return ECHO;
-        yield return TYPE;
+        return [EXIT, ECHO, TYPE];
+    }
+
+    public static string[] GetExecutablePaths()
+    {
+        var pathString = Environment.GetEnvironmentVariable("PATH");
+        return pathString?.Split(';', StringSplitOptions.TrimEntries) ?? [];
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using CodeCrafters.Shell;
 
 class Program
@@ -32,9 +33,41 @@ class Program
                     }
                     else
                     {
-                        Console.WriteLine($"{argumentCmd}: not found");
-                    }
+                        var executablePaths = Commands.GetExecutablePaths();
+                        var found = false;
+                        
+                        foreach (var path in executablePaths)
+                        {
 
+                            if (!Directory.Exists(path))
+                            {
+                                continue;
+                            }
+
+                            foreach (var filePath in Directory.EnumerateFiles(path))
+                            {
+                                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
+                                var extension = Path.GetExtension(filePath);
+                                if (fileNameWithoutExt.Equals(argumentCmd) && extension.Equals(".exe"))
+                                {
+                                    Console.WriteLine($"{argumentCmd} is {Path.GetFullPath(filePath)}");
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found)
+                            {
+                                break;
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            Console.WriteLine($"{argumentCmd}: not found");
+                        }
+                    }
+                    
                     break;
                 default:
                     Console.WriteLine($"{cmd}: command not found");
