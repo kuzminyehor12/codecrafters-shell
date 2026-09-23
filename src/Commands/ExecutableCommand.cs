@@ -4,16 +4,15 @@ namespace CodeCrafters.Shell;
 
 public class ExecutableCommand : ICommand
 {
-    public string ExecutablePath { get; }
+    public string ExecutableFile { get; }
 
-    public ExecutableCommand(string executablePath)
+    public ExecutableCommand(string executableFile)
     {
-        ExecutablePath = executablePath;
+        ExecutableFile = executableFile;
     }
 
     public void Execute(string[] args)
     {
-        var programName = Path.GetFileName(ExecutablePath);
-        Process.Start(programName, args).WaitForExit();
+        Process.Start(ExecutableFile, args).WaitForExit();
     }
 }
