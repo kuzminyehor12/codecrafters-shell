@@ -13,6 +13,7 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
-        Process.Start(ExecutablePath, args).WaitForExit();
+        var programName = Path.GetFileNameWithoutExtension(ExecutablePath);
+        Process.Start(ExecutablePath, [programName, ..args]).WaitForExit();
     }
 }
