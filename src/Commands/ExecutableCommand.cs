@@ -20,6 +20,7 @@ public class ExecutableCommand : ICommand
         };
 
         var process = Process.Start(processInfo);
+        process?.StandardError.Close();
         process?.WaitForExit();
     }
 }
