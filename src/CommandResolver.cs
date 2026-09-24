@@ -11,9 +11,10 @@ public class CommandResolver
             return builtInCommand;
         }
 
-        if (IsExecutableExists(cmd))
+        var executablePath = FindExecutablePath(cmd);
+        if (executablePath is not null)
         {
-            return new ExecutableCommand(cmd!);    
+            return new ExecutableCommand(executablePath);
         }
 
         return null;
@@ -32,14 +33,28 @@ public class CommandResolver
         };
     }
 
-    private static bool IsExecutableExists(string? cmd)
+    private static string? FindExecutablePath(string? cmd)
     {
         if (string.IsNullOrWhiteSpace(cmd))
         {
-            return false;
+            return null;
         }
 
-        var executablePaths = Commands.GetExecutablePaths();
-        return executablePaths.Any(path => File.Exists(Path.Combine(path, cmd)) || File.Exists(Path.Combine(path, cmd + ".exe")));
+        foreach (var path in Commands.GetExecutablePaths())
+        {
+            var fullPath = Path.Combine(path, cmd);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            var withExe = Path.Combine(path, cmd + ".exe");
+            if (File.Exists(withExe))
+            {
+                return withExe;
+            }
+        }
+
+        return null;
     }
 }
