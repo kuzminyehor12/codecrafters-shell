@@ -4,9 +4,9 @@ public class EchoCommand : ICommand
 {
     public void Execute(string[] args)
     {
-        var outStream = Output.Resolve(args, out int redirectionIndex);
-        var output = string.Join(' ', redirectionIndex != -1 ? args[..redirectionIndex] : args);
-        outStream.WriteLine(output);
-        Output.Flush(outStream);
+        var output = Output.Create(args);
+        var outputData = string.Join(' ', output.OutRedirectionIndex != -1 ? args[..output.OutRedirectionIndex] : args);
+        output.StandardOutput.WriteLine(outputData);
+        output.Flush();
     }
 }

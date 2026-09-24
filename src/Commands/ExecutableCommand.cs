@@ -13,8 +13,8 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
-        var outputStream = Output.Resolve(args, out int redirectionIndex);
-        var processArgs = redirectionIndex != -1 ? args[..redirectionIndex] : args;
+        var output = Output.Create(args);
+        var processArgs = output.OutRedirectionIndex != -1 ? args[..output.OutRedirectionIndex] : args;
 
         var processInfo = new ProcessStartInfo
         {
@@ -41,9 +41,9 @@ public class ExecutableCommand : ICommand
 
         Task.WhenAll(stdoutTask, stderrTask);
 
-        outputStream.Write(stdoutTask.Result);
-        Console.Write(stderrTask.Result);
+        output.StandardOutput.WriteLine(stdoutTask.Result);
+        output.StandardError.WriteLine(stderrTask.Result);
 
-        Output.Flush(outputStream);
+        output.Flush();
     }
 }

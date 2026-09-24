@@ -4,9 +4,9 @@ public class PwdCommand : ICommand
 {
     public void Execute(string[] args)
     {
-        var outStream = Output.Resolve(args, out _);
+        var output = Output.Create(args);
         var currentDirectory = Directory.GetCurrentDirectory();
-        outStream.WriteLine(currentDirectory);
-        Output.Flush(outStream);
+        output.StandardOutput.WriteLine(currentDirectory);
+        output.Flush();
     }
 }
