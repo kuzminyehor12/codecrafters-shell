@@ -20,8 +20,8 @@ public class ExecutableCommand : ICommand
         };
 
         var process = Process.Start(processInfo);
-
         var output = process?.StandardOutput.ReadToEnd();
+        _ = process?.StandardError.ReadToEnd();
         process?.WaitForExit();
         Console.Write(output);
     }
