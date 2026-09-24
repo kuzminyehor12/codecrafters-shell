@@ -18,7 +18,7 @@ public class ExecutableCommand : ICommand
 
         var processInfo = new ProcessStartInfo
         {
-            FileName = ExecutableFile,
+            FileName = Path.GetFileName(ExecutableFile),
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
