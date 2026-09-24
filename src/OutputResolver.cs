@@ -2,9 +2,9 @@ namespace CodeCrafters.Shell;
 
 public class OutputResolver
 {
-    public static TextWriter Resolve(string[] args)
+    public static TextWriter Resolve(string[] args, out int redirectionIndex)
     {
-        var redirectionIndex = args.IndexOf(">") != -1 ? args.IndexOf(">") : args.IndexOf("1>");
+        redirectionIndex = args.IndexOf(">") != -1 ? args.IndexOf(">") : args.IndexOf("1>");
 
         if (redirectionIndex == -1)
         {
