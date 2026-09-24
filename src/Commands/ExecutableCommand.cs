@@ -14,13 +14,23 @@ public class ExecutableCommand : ICommand
     public void Execute(string[] args)
     {
         var processInfo = new ProcessStartInfo(ExecutableFile, args)
-        { 
+        {
+            UseShellExecute = false,
             RedirectStandardOutput = true,
-            RedirectStandardError = false
+            RedirectStandardError = true,
         };
 
         var process = Process.Start(processInfo);
-        _ = process?.StandardError.ReadToEnd();
-        process?.WaitForExit();
+        if (process is null)
+        {
+            return;
+        }
+
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+        process.WaitForExit();
+        Task.WaitAll(stdoutTask, stderrTask);
+
+        Console.Write(stdoutTask.Result);
     }
 }
