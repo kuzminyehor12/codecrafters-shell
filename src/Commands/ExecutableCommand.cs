@@ -15,22 +15,14 @@ public class ExecutableCommand : ICommand
     {
         var processInfo = new ProcessStartInfo(ExecutableFile, args)
         {
-            UseShellExecute = false,
             RedirectStandardOutput = true,
-            RedirectStandardError = true,
+            RedirectStandardError = false
         };
 
         var process = Process.Start(processInfo);
-        if (process is null)
-        {
-            return;
-        }
 
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
-        process.WaitForExit();
-        Task.WaitAll(stdoutTask, stderrTask);
-
-        Console.Write(stdoutTask.Result);
+        var output = process?.StandardOutput.ReadToEnd();
+        process?.WaitForExit();
+        Console.Write(output);
     }
 }
