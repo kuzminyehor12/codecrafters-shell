@@ -21,7 +21,7 @@ public class ExecutableCommand : ICommand
             FileName = ExecutableFile,
             UseShellExecute = false,
             RedirectStandardOutput = true,
-            RedirectStandardError = true,
+            RedirectStandardError = false,
         };
 
         foreach (var arg in processArgs)
