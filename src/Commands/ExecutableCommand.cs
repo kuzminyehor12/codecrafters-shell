@@ -41,8 +41,8 @@ public class ExecutableCommand : ICommand
 
         Task.WhenAll(stdoutTask, stderrTask);
 
-        output.StandardOutput.WriteLine(stdoutTask.Result);
-        output.StandardError.WriteLine(stderrTask.Result);
+        output.StandardOutput.Write(stdoutTask.Result);
+        output.StandardError.Write(stderrTask.Result);
 
         output.Flush();
     }
