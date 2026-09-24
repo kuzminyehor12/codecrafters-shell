@@ -21,7 +21,7 @@ public class ExecutableCommand : ICommand
             FileName = ExecutableFile,
             UseShellExecute = false,
             RedirectStandardOutput = true,
-            RedirectStandardError = false,
+            RedirectStandardError = true,
         };
 
         foreach (var arg in processArgs)
@@ -36,10 +36,12 @@ public class ExecutableCommand : ICommand
         }
 
         var stdout = process.StandardOutput.ReadToEnd();
-        _ = process.StandardError.ReadToEnd();
+        var stderr = process.StandardError.ReadToEnd();
+
         process.WaitForExit();
 
         outputStream.Write(stdout);
+        Console.Write(stderr);
         OutputResolver.Commit(outputStream);
     }
 }
