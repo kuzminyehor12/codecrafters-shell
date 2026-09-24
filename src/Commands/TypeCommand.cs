@@ -4,12 +4,13 @@ public class TypeCommand : ICommand
 {
     public void Execute(string[] args)
     {
+        var outStream = OutputResolver.Resolve(args, out _);
         var builtInCommands = Commands.GetBuiltInCommands();
         var argumentCmd = args.Length > 0 ? args[0] : string.Empty;
 
         if (builtInCommands.Contains(argumentCmd))
         {
-            Console.WriteLine($"{argumentCmd} is a shell builtin");
+            outStream.WriteLine($"{argumentCmd} is a shell builtin");
         }
         else
         {
@@ -33,7 +34,7 @@ public class TypeCommand : ICommand
                             UnixFileMode.UserExecute |
                             UnixFileMode.GroupExecute))
                     {
-                        Console.WriteLine($"{argumentCmd} is {fileInfo.FullName}");
+                        outStream.WriteLine($"{argumentCmd} is {fileInfo.FullName}");
                         found = true;
                         break;
                     }
