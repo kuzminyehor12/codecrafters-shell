@@ -32,7 +32,7 @@ public class Output
 
     private static (TextWriter Writer, int RedirectionIndex) ResolveArgs(string[] args, string redirectionOperator = ">")
     {
-        int redirectionIndex = Array.IndexOf(args, redirectionOperator);
+        int redirectionIndex = args.ToList().IndexOf(redirectionOperator);
 
         if (redirectionIndex == -1)
         {
