@@ -13,6 +13,13 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
-        Process.Start(ExecutableFile, args).WaitForExit();
+        var processInfo = new ProcessStartInfo(ExecutableFile, args)
+        { 
+            RedirectStandardOutput = true,
+            RedirectStandardError = false
+        };
+
+        var process = Process.Start(processInfo);
+        process?.WaitForExit();
     }
 }
