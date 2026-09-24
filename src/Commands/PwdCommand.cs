@@ -7,5 +7,6 @@ public class PwdCommand : ICommand
         var outStream = OutputResolver.Resolve(args, out _);
         var currentDirectory = Directory.GetCurrentDirectory();
         outStream.WriteLine(currentDirectory);
+        OutputResolver.Commit(outStream);
     }
 }

@@ -19,6 +19,7 @@ public class ExecutableCommand : ICommand
         var processInfo = new ProcessStartInfo
         {
             FileName = ExecutableFile,
+            UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
@@ -39,11 +40,6 @@ public class ExecutableCommand : ICommand
         process.WaitForExit();
 
         outputStream.Write(stdout);
-        outputStream.Flush();
-
-        if (!ReferenceEquals(outputStream, Console.Out))
-        {
-            outputStream.Dispose();
-        }
+        OutputResolver.Commit(outputStream);
     }
 }

@@ -51,5 +51,7 @@ public class TypeCommand : ICommand
                 Console.WriteLine($"{argumentCmd}: not found");
             }
         }
+
+        OutputResolver.Commit(outStream);
     }
 }

@@ -21,4 +21,14 @@ public class OutputResolver
         var fileStream = new FileStream(fileName, FileMode.Create);
         return new StreamWriter(fileStream);
     }
+
+    public static void Commit(TextWriter writer)
+    {
+        writer.Flush();
+
+        if (!ReferenceEquals(writer, Console.Out))
+        {
+            writer.Dispose();
+        }
+    }
 }
