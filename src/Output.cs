@@ -2,6 +2,8 @@ namespace CodeCrafters.Shell;
 
 public class Output
 {
+    private static readonly string[] RedirectionOperators = [">", "1>", "2>", ">>", "1>>", "2>>"];
+
     public TextWriter StandardOutput { get; private set; } = null!;
 
     public int OutRedirectionIndex { get; private set; } = -1;
@@ -14,23 +16,32 @@ public class Output
     {
         var output = new Output();
 
-        var resolvedShorthandOutput = ResolveArgs(args);
-        var standardOutputInfo = resolvedShorthandOutput.RedirectionIndex == -1 
-            ? ResolveArgs(args, "1>") 
-            : resolvedShorthandOutput;
+        if (HasOutRedirection(args, out string? redirectionOperator))
+        {
+            var standardOutputInfo = ResolveArgs(args, redirectionOperator!);
+            output.StandardOutput = standardOutputInfo.Writer;
+            output.OutRedirectionIndex = standardOutputInfo.RedirectionIndex;
+        }
+        else
+        {
+            output.StandardOutput = Console.Out;
+        }
 
-        output.StandardOutput = standardOutputInfo.Writer;
-        output.OutRedirectionIndex = standardOutputInfo.RedirectionIndex;
-
-        var errorOutputInfo = ResolveArgs(args, "2>");
-
-        output.StandardError = errorOutputInfo.Writer;
-        output.ErrRedirectionIndex = errorOutputInfo.RedirectionIndex;
+        if (HasErrRedirection(args, out string? errRedirectionOperator))
+        {
+            var errorOutputInfo = ResolveArgs(args, errRedirectionOperator!);
+            output.StandardError = errorOutputInfo.Writer;
+            output.ErrRedirectionIndex = errorOutputInfo.RedirectionIndex;
+        }
+        else
+        {
+            output.StandardError = Console.Out;
+        }  
 
         return output;
     }
 
-    private static (TextWriter Writer, int RedirectionIndex) ResolveArgs(string[] args, string redirectionOperator = ">")
+    private static (TextWriter Writer, int RedirectionIndex) ResolveArgs(string[] args, string redirectionOperator)
     {
         int redirectionIndex = args.IndexOf(redirectionOperator);
 
@@ -46,9 +57,49 @@ public class Output
             return (Console.Out, redirectionIndex);
         }
 
-        var fileStream = new FileStream(fileName, FileMode.Create);
+        var fileMode = RedirectionOperators.Contains(redirectionOperator) 
+            && new string[] { ">", "1>", "2>" }.Contains(redirectionOperator) 
+                ? FileMode.Create 
+                : FileMode.Append;
+
+        var fileStream = new FileStream(fileName, fileMode);
         return (new StreamWriter(fileStream), redirectionIndex);
     }
+
+    private static bool HasOutRedirection(string[] args, out string? redirectionOperator)
+    {
+        string[] outRedirectionOperators = [">", "1>", ">>", "1>>"];
+        redirectionOperator = null;
+
+        foreach (var op in outRedirectionOperators)
+        {
+            if (args.Contains(op))
+            {
+                redirectionOperator = op;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool HasErrRedirection(string[] args, out string? redirectionOperator)
+    {
+        string[] errRedirectionOperators = ["2>", "2>>"];
+        redirectionOperator = null;
+
+        foreach (var op in errRedirectionOperators)
+        {
+            if (args.Contains(op))
+            {
+                redirectionOperator = op;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public void Flush()
     {
