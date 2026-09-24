@@ -13,13 +13,12 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
-        var outputStream = OutputResolver.Resolve(args, out int redirectionIndex);
+        var outputStream = Output.Resolve(args, out int redirectionIndex);
         var processArgs = redirectionIndex != -1 ? args[..redirectionIndex] : args;
 
         var processInfo = new ProcessStartInfo
         {
             FileName = Path.GetFileName(ExecutableFile),
-            UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
@@ -35,13 +34,16 @@ public class ExecutableCommand : ICommand
             return;
         }
 
-        var stdout = process.StandardOutput.ReadToEnd();
-        var stderr = process.StandardError.ReadToEnd();
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
 
         process.WaitForExit();
 
-        outputStream.Write(stdout);
-        Console.Write(stderr);
-        OutputResolver.Commit(outputStream);
+        Task.WhenAll(stdoutTask, stderrTask);
+
+        outputStream.Write(stdoutTask.Result);
+        Console.Write(stderrTask.Result);
+
+        Output.Flush(outputStream);
     }
 }

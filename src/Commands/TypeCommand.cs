@@ -4,7 +4,7 @@ public class TypeCommand : ICommand
 {
     public void Execute(string[] args)
     {
-        var outStream = OutputResolver.Resolve(args, out _);
+        var outStream = Output.Resolve(args, out _);
         var builtInCommands = Commands.GetBuiltInCommands();
         var argumentCmd = args.Length > 0 ? args[0] : string.Empty;
 
@@ -52,6 +52,6 @@ public class TypeCommand : ICommand
             }
         }
 
-        OutputResolver.Commit(outStream);
+        Output.Flush(outStream);
     }
 }

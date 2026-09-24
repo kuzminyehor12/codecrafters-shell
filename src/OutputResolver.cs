@@ -1,6 +1,6 @@
 namespace CodeCrafters.Shell;
 
-public class OutputResolver
+public class Output
 {
     public static TextWriter Resolve(string[] args, out int redirectionIndex)
     {
@@ -22,7 +22,7 @@ public class OutputResolver
         return new StreamWriter(fileStream);
     }
 
-    public static void Commit(TextWriter writer)
+    public static void Flush(TextWriter writer)
     {
         writer.Flush();
 
