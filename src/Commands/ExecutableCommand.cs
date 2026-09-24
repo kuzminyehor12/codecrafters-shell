@@ -13,6 +13,8 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
+        var outputStream = OutputResolver.Resolve(args, out _);
+        
         var processInfo = new ProcessStartInfo
         {
             FileName = ExecutableFile,
@@ -34,8 +36,9 @@ public class ExecutableCommand : ICommand
         var stdoutTask = process.StandardOutput.ReadToEndAsync();
         var stderrTask = process.StandardError.ReadToEndAsync();
         process.WaitForExit();
+        
         Task.WaitAll(stdoutTask, stderrTask);
 
-        Console.Write(stdoutTask.Result);
+        outputStream.Write(stdoutTask.Result);
     }
 }
