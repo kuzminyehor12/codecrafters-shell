@@ -16,13 +16,13 @@ public class ExecutableCommand : ICommand
         var processInfo = new ProcessStartInfo(ExecutableFile, args)
         {
             RedirectStandardOutput = true,
-            RedirectStandardError = false
+            RedirectStandardError = true
         };
 
         var process = Process.Start(processInfo);
-        var output = process?.StandardOutput.ReadToEnd();
-        _ = process?.StandardError.ReadToEnd();
+        //var output = process?.StandardOutput.ReadToEnd();
+        // _ = process?.StandardError.ReadToEnd();
         process?.WaitForExit();
-        Console.Write(output);
+        // Console.Write(output);
     }
 }
