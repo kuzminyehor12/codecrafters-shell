@@ -10,7 +10,7 @@ public class Commands
 
     public static string[] GetBuiltInCommands()
     {
-        return [EXIT, ECHO, TYPE, PWD];
+        return [EXIT, ECHO, TYPE, PWD, CD];
     }
 
     public static string[] GetExecutablePaths()

@@ -6,7 +6,7 @@ class Program
     static void Main()
     {
         ReadLineExt.Context.AutoCompletionHandler = new AutocompletionHandler();
-        
+
         while (true)
         {          
             var input = ReadLineExt.Read("$ ");
