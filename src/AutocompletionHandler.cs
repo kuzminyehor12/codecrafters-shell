@@ -25,10 +25,10 @@ public class AutocompletionHandler : IAutoCompleteHandler
         return executablePaths
             .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)
-            .Where(fileName => File.Exists(fileName) && new FileInfo(fileName).UnixFileMode.HasFlag(UnixFileMode.OtherExecute | UnixFileMode.GroupExecute | UnixFileMode.UserExecute))
+            .Where(FileUtilities.IsExecutable)
             .Select(Path.GetFileNameWithoutExtension)
             .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.StartsWith(text))
-            .Select(cmd => cmd + " ")
+            .Select(exe => exe + " ")
             .ToArray();
     }
 

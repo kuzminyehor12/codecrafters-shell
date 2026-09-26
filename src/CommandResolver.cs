@@ -43,15 +43,10 @@ public class CommandResolver
         foreach (var path in Commands.GetExecutablePaths())
         {
             var fullPath = Path.Combine(path, cmd);
-            if (File.Exists(fullPath))
+            
+            if (FileUtilities.IsExecutable(fullPath))
             {
                 return fullPath;
-            }
-
-            var withExe = Path.Combine(path, cmd + ".exe");
-            if (File.Exists(withExe))
-            {
-                return withExe;
             }
         }
 
