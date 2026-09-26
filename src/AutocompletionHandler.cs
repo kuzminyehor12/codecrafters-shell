@@ -28,6 +28,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Where(fileName => File.Exists(fileName) && new FileInfo(fileName).UnixFileMode.HasFlag(UnixFileMode.OtherExecute | UnixFileMode.GroupExecute | UnixFileMode.UserExecute))
             .Select(Path.GetFileNameWithoutExtension)
             .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.StartsWith(text))
+            .Select(cmd => cmd + " ")
             .ToArray();
     }
 
