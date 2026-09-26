@@ -14,6 +14,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
         }
 
         var builtInCommands = Commands.GetBuiltInCommands();
-        return builtInCommands.Where(cmd => cmd.StartsWith(text)).Select(cmd => cmd + " ").ToArray();
+        var suggestedCommands = builtInCommands.Where(cmd => cmd.StartsWith(text)).Select(cmd => cmd + " ").ToArray();
+
+        return suggestedCommands.Length > 0 ? suggestedCommands : ["\u0007"];
     }
 }
