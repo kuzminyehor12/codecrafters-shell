@@ -15,6 +15,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         var suggestedBuiltIns = FindBuiltInCommands(text);
         var suggestedExecutables = FindExecutables(text);
+        Console.WriteLine($"{string.Join(',', suggestedExecutables)}");
         string[] suggestedCommands = [..suggestedBuiltIns, ..suggestedExecutables];
         return suggestedCommands.Length > 0 ? suggestedCommands : [text + "\a"];
     }
@@ -27,7 +28,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .SelectMany(Directory.EnumerateFiles)
             .Where(fileName => Path.GetExtension(fileName) == ".exe")
             .Select(Path.GetFileNameWithoutExtension)
-            .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.Contains(text))
+            .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.StartsWith(text))
             .ToArray();
     }
 
