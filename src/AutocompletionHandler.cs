@@ -10,19 +10,10 @@ public class AutocompletionHandler : IAutoCompleteHandler
     {
         if (text.Length < 3)
         {
-            return null;
+            return [];
         }
 
         var builtInCommands = Commands.GetBuiltInCommands();
-
-        return builtInCommands.Aggregate(builtInCommands, (suggestedCommands, cmd) =>
-        {
-            if (!cmd.StartsWith(text))
-            {
-                suggestedCommands[suggestedCommands.IndexOf(cmd)] = null;
-            }
-
-            return suggestedCommands;
-        });
+        return builtInCommands.Where(cmd => cmd.StartsWith(text)).ToArray();
     }
 }
