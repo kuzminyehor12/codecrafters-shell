@@ -1,15 +1,15 @@
-using System.Linq.Expressions;
 using CodeCrafters.Shell;
+using ReadLineExt = ReadLine.ReadLine;
 
 class Program
 {
     static void Main()
     {
+        ReadLineExt.Context.AutoCompletionHandler = new AutocompletionHandler();
+        
         while (true)
-        {    
-            Console.Write("$ ");
-            
-            var input = Console.ReadLine();
+        {          
+            var input = ReadLineExt.Read("$ ");
             var tokens = input?.Split(' ');
 
             var cmdToken = tokens?.Length > 0 ? tokens[0] : input;
