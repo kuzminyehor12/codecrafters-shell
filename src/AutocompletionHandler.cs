@@ -26,9 +26,9 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)
             .Where(fileName => Path.GetExtension(fileName) == ".exe")
-            .Where(exe => exe.StartsWith(text))
             .Select(Path.GetFileNameWithoutExtension)
-            ?.ToArray() ?? [];
+            .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.StartsWith(text))
+            .ToArray();
     }
 
     private string[] FindBuiltInCommands(string text)
