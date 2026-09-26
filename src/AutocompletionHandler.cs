@@ -22,8 +22,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
     private string[] FindExecutables(string text)
     {
         var executablePaths = Commands.GetExecutablePaths();
-
         return executablePaths
+            .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)
             .Where(fileName => Path.GetExtension(fileName) == ".exe")
             .Where(exe => exe.StartsWith(text))
