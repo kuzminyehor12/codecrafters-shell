@@ -16,6 +16,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
         var builtInCommands = Commands.GetBuiltInCommands();
         var suggestedCommands = builtInCommands.Where(cmd => cmd.StartsWith(text)).Select(cmd => cmd + " ").ToArray();
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : ["\u0007"];
+        return suggestedCommands.Length > 0 ? suggestedCommands : [text, "\u0007"];
     }
 }
