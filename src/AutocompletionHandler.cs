@@ -15,7 +15,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         var suggestedBuiltIns = FindBuiltInCommands(text);
         var suggestedExecutables = FindExecutables(text);
-        Console.WriteLine($"{string.Join(',', suggestedExecutables)}");
         string[] suggestedCommands = [..suggestedBuiltIns, ..suggestedExecutables];
         return suggestedCommands.Length > 0 ? suggestedCommands : [text + "\a"];
     }
