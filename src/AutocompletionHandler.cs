@@ -25,9 +25,9 @@ public class AutocompletionHandler : IAutoCompleteHandler
         return executablePaths
             .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)
-            .Where(fileName => Path.GetExtension(fileName) == "exe")
+            .Where(fileName => Path.GetExtension(fileName) == ".exe")
             .Select(Path.GetFileNameWithoutExtension)
-            .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.StartsWith(text))
+            .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.Contains(text))
             .ToArray();
     }
 
