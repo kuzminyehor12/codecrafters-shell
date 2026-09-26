@@ -13,31 +13,25 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [];
         }
 
-        var suggestedBuiltIns = FindBuiltInCommands(text);
-        var suggestedExecutables = FindExecutables(text);
-        string[] suggestedCommands = [..suggestedBuiltIns, ..suggestedExecutables];
+        var suggestedBuiltIns = Commands.GetBuiltInCommands();
+        var suggestedExecutables = GetExecutables();
+
+        string[] suggestedCommands = suggestedBuiltIns
+            .Union(suggestedExecutables)
+            .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
+            .Select(cmd => cmd + " ")
+            .ToArray();
+
         return suggestedCommands.Length > 0 ? suggestedCommands : [text + "\a"];
     }
 
-    private string[] FindExecutables(string text)
+    private IEnumerable<string> GetExecutables()
     {
         var executablePaths = Commands.GetExecutablePaths();
         return executablePaths
             .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)
             .Where(FileUtilities.IsExecutable)
-            .Select(Path.GetFileNameWithoutExtension)
-            .Where(exe => !string.IsNullOrWhiteSpace(exe) && exe.StartsWith(text))
-            .Select(exe => exe + " ")
-            .ToArray();
-    }
-
-    private string[] FindBuiltInCommands(string text)
-    {
-        var builtInCommands = Commands.GetBuiltInCommands();
-        return builtInCommands
-            .Where(cmd => cmd.StartsWith(text))
-            .Select(cmd => cmd + " ")
-            .ToArray();
+            .Select(Path.GetFileNameWithoutExtension);
     }
 }
