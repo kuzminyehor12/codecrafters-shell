@@ -27,8 +27,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
         string[] suggestedCommands = builtIns
             .Union(executables)
             .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
+            .OrderBy(cmd => cmd)
             .Select(cmd => cmd + " ")
-            .OrderBy(c => c)
             .ToArray();
             
         if (suggestedCommands.Length > 1)
@@ -36,19 +36,15 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsCheckedOnce)
             {
                 _multipleSuggestionsCheckedOnce = true;
+                _writer.WriteLine(text);
                 return AlarmText(text);
             }
             else
             {
-                try
-                {
-                    _multipleSuggestionsCheckedOnce = false;
-                    return [text];
-                }
-                finally
-                {
-                    //_writer.WriteLine(string.Join(" ", suggestedCommands));
-                }
+                _multipleSuggestionsCheckedOnce = false;
+                _writer.WriteLine(text);
+                _writer.WriteLine(string.Join(" ", suggestedCommands));
+                return [text];
             }
         }
 

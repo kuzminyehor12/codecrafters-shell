@@ -24,7 +24,7 @@ public class CommandResolver
     {
         return cmd switch
         {
-            Commands.EXIT => new ExitCommand(),
+            Commands.EXIT or Commands.EXIT_D => new ExitCommand(),
             Commands.ECHO => new EchoCommand(),
             Commands.TYPE => new TypeCommand(),
             Commands.PWD => new PwdCommand(),

@@ -3,6 +3,8 @@ namespace CodeCrafters.Shell;
 public class Commands
 {
     public const string EXIT = "exit";
+    public const string EXIT_D = "exitd";
+
     public const string ECHO = "echo";
     public const string TYPE = "type";
     public const string PWD = "pwd";
@@ -10,7 +12,7 @@ public class Commands
 
     public static string[] GetBuiltInCommands()
     {
-        return [EXIT, ECHO, TYPE, PWD, CD];
+        return [EXIT, EXIT_D, ECHO, TYPE, PWD, CD];
     }
 
     public static string[] GetExecutablePaths()
