@@ -4,6 +4,14 @@ namespace CodeCrafters.Shell;
 
 public class AutocompletionHandler : IAutoCompleteHandler
 {
+    private readonly TextWriter _writer;
+    private bool _multipleSuggestionsCheckedOnce = false;
+
+    public AutocompletionHandler(TextWriter writer)
+    {
+        _writer = writer;
+    }
+
     public char[] Separators { get; set; } = [];
 
     public string[] GetSuggestions(string text, int index)
@@ -13,17 +21,34 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [];
         }
 
-        var suggestedBuiltIns = Commands.GetBuiltInCommands();
-        var suggestedExecutables = GetExecutables();
+        var builtIns = Commands.GetBuiltInCommands();
+        var executables = GetExecutables();
 
-        string[] suggestedCommands = suggestedBuiltIns
-            .Union(suggestedExecutables)
+        string[] suggestedCommands = builtIns
+            .Union(executables)
             .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
             .Select(cmd => cmd + " ")
             .ToArray();
+            
+        if (suggestedCommands.Length > 1)
+        {
+            if (!_multipleSuggestionsCheckedOnce)
+            {
+                _multipleSuggestionsCheckedOnce = true;
+                return AlarmText(text);
+            }
+            else
+            {
+                _multipleSuggestionsCheckedOnce = false;
+                _writer.WriteLine(string.Join(" ", suggestedCommands));
+                return [text];
+            }
+        }
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : [text + "\a"];
+        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
+
+    private static string[] AlarmText(string text) => [text + "\a"];
 
     private IEnumerable<string> GetExecutables()
     {
