@@ -40,9 +40,15 @@ public class AutocompletionHandler : IAutoCompleteHandler
             }
             else
             {
-                _multipleSuggestionsCheckedOnce = false;
-                _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [text];
+                try
+                {
+                    _multipleSuggestionsCheckedOnce = false;
+                    return [text];
+                }
+                finally
+                {
+                    _writer.WriteLine(string.Join(" ", suggestedCommands));
+                }
             }
         }
 
