@@ -5,7 +5,7 @@ class Program
 {
     static void Main()
     {
-        ReadLineExt.Context.AutoCompletionHandler = new AutocompletionHandler();
+        ReadLineExt.Context.AutoCompletionHandler = new AutocompletionHandler(Console.Out);
 
         while (true)
         {          
