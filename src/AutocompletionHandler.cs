@@ -47,7 +47,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 }
                 finally
                 {
-                    _writer.WriteLine(string.Join(" ", suggestedCommands));
+                    //_writer.WriteLine(string.Join(" ", suggestedCommands));
                 }
             }
         }
