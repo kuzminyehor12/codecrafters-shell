@@ -41,7 +41,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             {
                 _multipleSuggestionsCheckedOnce = false;
                 _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [text];
+                return [" " + text];
             }
         }
 
