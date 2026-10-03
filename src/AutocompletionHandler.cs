@@ -41,14 +41,14 @@ public class AutocompletionHandler : IAutoCompleteHandler
             {
                 _multipleSuggestionsCheckedOnce = false;
                 _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [" " + text];
+                return [text];
             }
         }
 
         return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
 
-    private static string[] AlarmText(string text) => [text + "\a"];
+    private static string[] AlarmText(string text) => [" " + text + "\a"];
 
     private IEnumerable<string> GetExecutables()
     {
