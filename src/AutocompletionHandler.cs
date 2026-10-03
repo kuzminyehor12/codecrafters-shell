@@ -36,17 +36,17 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsCheckedOnce)
             {
                 _multipleSuggestionsCheckedOnce = true;
-                return ["\a"];
+                return AlarmText(text);
             }
             else
             {
                 _multipleSuggestionsCheckedOnce = false;
                 _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [];
+                return [text];
             }
         }
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : ["\a"];
+        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
