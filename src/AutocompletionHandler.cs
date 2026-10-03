@@ -36,7 +36,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsCheckedOnce)
             {
                 _multipleSuggestionsCheckedOnce = true;
-                return AlarmText(text);
+                return ["\a"];
             }
             else
             {
@@ -46,7 +46,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             }
         }
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
+        return suggestedCommands.Length > 0 ? suggestedCommands : ["\a"];
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
