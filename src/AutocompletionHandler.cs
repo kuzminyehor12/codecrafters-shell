@@ -28,6 +28,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Union(executables)
             .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
             .Select(cmd => cmd + " ")
+            .OrderBy(c => c)
             .ToArray();
             
         if (suggestedCommands.Length > 1)
