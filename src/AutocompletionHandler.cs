@@ -5,7 +5,7 @@ namespace CodeCrafters.Shell;
 public class AutocompletionHandler : IAutoCompleteHandler
 {
     private readonly TextWriter _writer;
-    private static bool _multipleSuggestionsFirstRun = false;
+    private static bool _multipleSuggestionsSecondRun = false;
 
     public AutocompletionHandler(TextWriter writer)
     {
@@ -21,8 +21,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [];
         }
 
-        if (_multipleSuggestionsFirstRun)
-            _writer.WriteLine(text);
+        if (_multipleSuggestionsSecondRun)
+            _writer.WriteLine("Second run");
 
         var builtIns = Commands.GetBuiltInCommands();
         var executables = GetExecutables();
@@ -36,14 +36,14 @@ public class AutocompletionHandler : IAutoCompleteHandler
             
         if (suggestedCommands.Length > 1)
         {
-            if (!_multipleSuggestionsFirstRun)
+            if (!_multipleSuggestionsSecondRun)
             {
-                _multipleSuggestionsFirstRun = true;
+                _multipleSuggestionsSecondRun = true;
                 return AlarmText(text);
             }
             else
             {
-                _multipleSuggestionsFirstRun = false;
+                _multipleSuggestionsSecondRun = false;
                 _writer.WriteLine(string.Join(" ", suggestedCommands));
                 return suggestedCommands;
             }
