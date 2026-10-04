@@ -8,14 +8,15 @@ public class Commands
     public const string PWD = "pwd";
     public const string CD = "cd";
 
-    public static string[] GetBuiltInCommands()
-    {
-        return [EXIT, ECHO, TYPE, PWD, CD];
-    }
+    public static IReadOnlyCollection<string> BuiltInCommands => [EXIT, ECHO, TYPE, PWD, CD];
 
-    public static string[] GetExecutablePaths()
+    public static IReadOnlyCollection<string> ExecutablePaths
     {
-        var pathString = Environment.GetEnvironmentVariable("PATH");
-        return pathString?.Split(Path.PathSeparator, StringSplitOptions.TrimEntries) ?? [];
+        get => field;
+        set
+        {
+            var pathString = Environment.GetEnvironmentVariable("PATH");
+            field = pathString?.Split(Path.PathSeparator, StringSplitOptions.TrimEntries) ?? [];
+        }
     }
 }

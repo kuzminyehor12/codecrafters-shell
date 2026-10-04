@@ -4,12 +4,11 @@ namespace CodeCrafters.Shell;
 
 public class AutocompletionHandler : IAutoCompleteHandler
 {
-    private readonly TextWriter _writer;
-    private bool _multipleSuggestionsSecondRun = false;
+    private readonly string _prompt;
 
-    public AutocompletionHandler(TextWriter writer)
+    public AutocompletionHandler(string prompt)
     {
-        _writer = writer;
+        _prompt = prompt;
     }
 
     public char[] Separators { get; set; } = [];
@@ -21,7 +20,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return null;
         }
 
-        var builtIns = Commands.GetBuiltInCommands();
+        var builtIns = Commands.BuiltInCommands;
         var executables = GetExecutables();
 
         string[] suggestedCommands = builtIns
@@ -30,30 +29,27 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .OrderBy(cmd => cmd)
             .Select(cmd => cmd + " ")
             .ToArray();
-            
-        if (suggestedCommands.Length > 1)
-        {
-            if (!_multipleSuggestionsSecondRun)
-            {
-                _multipleSuggestionsSecondRun = true;
-                return [..AlarmText(text), " " + text + $"\n{string.Join(" ", suggestedCommands).TrimEnd()}" + "\n$ " + text];
-            }
-            else
-            {
-                _multipleSuggestionsSecondRun = false;
-                _writer.WriteLine();
-                return null;
-            }
-        }
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
+        var multipleSuggestion = suggestedCommands.Length > 1;
+
+        return multipleSuggestion 
+            ? [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)]
+            : suggestedCommands.Length > 0 
+                ? suggestedCommands : AlarmText(text);
+    }
+
+    private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
+    {
+        var commandsAsString = string.Join(" ", suggestedCommands).TrimEnd();
+        var prompt = _prompt + text;
+        return string.Join('\n', $" {text}", commandsAsString, prompt);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
 
     private static IEnumerable<string> GetExecutables()
     {
-        var executablePaths = Commands.GetExecutablePaths();
+        var executablePaths = Commands.ExecutablePaths;
         return executablePaths
             .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)

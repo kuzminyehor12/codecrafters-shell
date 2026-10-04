@@ -5,7 +5,7 @@ public class TypeCommand : ICommand
     public void Execute(string[] args)
     {
         var output = Output.Create(args);
-        var builtInCommands = Commands.GetBuiltInCommands();
+        var builtInCommands = Commands.BuiltInCommands;
         var argumentCmd = args.Length > 0 ? args[0] : string.Empty;
 
         if (builtInCommands.Contains(argumentCmd))
@@ -14,7 +14,7 @@ public class TypeCommand : ICommand
         }
         else
         {
-            var executablePaths = Commands.GetExecutablePaths();
+            var executablePaths = Commands.ExecutablePaths;
             var found = false;
 
             foreach (var path in executablePaths)

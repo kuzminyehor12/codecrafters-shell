@@ -5,11 +5,12 @@ class Program
 {
     static void Main()
     {
-        ReadLineExt.Context.AutoCompletionHandler = new AutocompletionHandler(Console.Out);
+        const string prompt = "$ ";
+        ReadLineExt.Context.AutoCompletionHandler = new AutocompletionHandler(prompt);
 
         while (true)
         {          
-            var input = ReadLineExt.Read("$ ");
+            var input = ReadLineExt.Read(prompt);
             var tokens = input?.Split(' ');
 
             var cmdToken = tokens?.Length > 0 ? tokens[0] : input;
