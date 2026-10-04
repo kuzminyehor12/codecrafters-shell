@@ -36,7 +36,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsSecondRun)
             {
                 _multipleSuggestionsSecondRun = true;
-                return [..AlarmText(text), string.Join(" ", suggestedCommands)];
+                return [..AlarmText(text), text];
             }
             else
             {
