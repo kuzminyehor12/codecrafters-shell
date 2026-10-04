@@ -42,7 +42,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
     {
         var commandsAsString = string.Join(" ", suggestedCommands).TrimEnd();
         var prompt = _prompt + text;
-        return $" {text}" + string.Join('\n', commandsAsString, prompt);
+        return $" {text}" + $"\n{commandsAsString}" + $"\n{prompt}";
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
