@@ -22,7 +22,9 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [];
         }
 
-        _writer.WriteLine(text);
+        if (!_multipleSuggestionsFirstRun)
+            _writer.WriteLine(text);
+            
         var builtIns = Commands.GetBuiltInCommands();
         var executables = GetExecutables();
 
