@@ -30,15 +30,13 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .ToArray();
 
         var multipleSuggestions = suggestedCommands.Length > 1;
-
-        Console.WriteLine(suggestedCommands.Length);
         
         if (multipleSuggestions)
         {
             return [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
-        return suggestedCommands.Length > 0 ? [suggestedCommands[0] + " "] : AlarmText(text);
+        return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "] : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
