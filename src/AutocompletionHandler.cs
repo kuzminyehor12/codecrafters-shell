@@ -34,8 +34,9 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         return multipleSuggestions 
             ? [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)]
-            : suggestedCommands.Length == 1
-                ? suggestedCommands : AlarmText(text);
+            : suggestedCommands.Length > 0
+                ? suggestedCommands
+                : [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)];
     }
 
     private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
