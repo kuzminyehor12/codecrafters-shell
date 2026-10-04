@@ -18,7 +18,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
     {
         if (text.Length < 3)
         {
-            return [];
+            return null;
         }
 
         var builtIns = Commands.GetBuiltInCommands();
@@ -41,8 +41,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
             else
             {
                 _multipleSuggestionsSecondRun = false;
-                //_writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [" " + text];
+                _writer.WriteLine(string.Join(" ", suggestedCommands));
+                return null;
             }
         }
 
