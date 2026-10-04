@@ -5,7 +5,7 @@ namespace CodeCrafters.Shell;
 public class AutocompletionHandler : IAutoCompleteHandler
 {
     private readonly TextWriter _writer;
-    private static bool _multipleSuggestionsSecondRun = false;
+    private bool _multipleSuggestionsSecondRun = false;
 
     public AutocompletionHandler(TextWriter writer)
     {
