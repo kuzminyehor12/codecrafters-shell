@@ -32,18 +32,19 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         var multipleSuggestions = suggestedCommands.Length > 1;
 
-        return multipleSuggestions 
-            ? [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)]
-            : suggestedCommands.Length > 0
-                ? suggestedCommands
-                : AlarmText(text);
+        if (multipleSuggestions)
+        {
+            return [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)];
+        }
+
+        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
     {
         var commandsAsString = string.Join(" ", suggestedCommands).TrimEnd();
         var prompt = _prompt + text;
-        return $" Text: {string.Join('\n', text, commandsAsString, prompt)}";
+        return $" {string.Join('\n', text, commandsAsString, prompt)}";
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
