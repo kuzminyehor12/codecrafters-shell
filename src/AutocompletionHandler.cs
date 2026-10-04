@@ -31,27 +31,27 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Select(cmd => cmd + " ")
             .ToArray();
             
-        // if (suggestedCommands.Length > 1)
-        // {
-        //     if (!_multipleSuggestionsSecondRun)
-        //     {
-        //         _multipleSuggestionsSecondRun = true;
-        //         return AlarmText(text);
-        //     }
-        //     else
-        //     {
-        //         _multipleSuggestionsSecondRun = false;
-        //         _writer.WriteLine(string.Join(" ", suggestedCommands));
-        //         return [text];
-        //     }
-        // }
+        if (suggestedCommands.Length > 1)
+        {
+            if (!_multipleSuggestionsSecondRun)
+            {
+                _multipleSuggestionsSecondRun = true;
+                return AlarmText(text);
+            }
+            else
+            {
+                _multipleSuggestionsSecondRun = false;
+                //_writer.WriteLine(string.Join(" ", suggestedCommands));
+                return [" " + text];
+            }
+        }
 
-        return AlarmText(text);
+        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
 
-    private IEnumerable<string> GetExecutables()
+    private static IEnumerable<string> GetExecutables()
     {
         var executablePaths = Commands.GetExecutablePaths();
         return executablePaths
