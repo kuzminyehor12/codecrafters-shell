@@ -22,7 +22,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         }
 
         if (_multipleSuggestionsSecondRun)
-            _writer.WriteLine("Second run");
+            return ["Second run"];
 
         var builtIns = Commands.GetBuiltInCommands();
         var executables = GetExecutables();
