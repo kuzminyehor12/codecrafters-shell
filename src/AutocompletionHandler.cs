@@ -31,7 +31,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         var multipleSuggestions = suggestedCommands.Length > 1;
 
-        Console.WriteLine(multipleSuggestions);
+        Console.WriteLine(suggestedCommands.Length);
         
         if (multipleSuggestions)
         {
