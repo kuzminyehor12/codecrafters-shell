@@ -41,8 +41,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
             else
             {
                 _multipleSuggestionsCheckedOnce = false;
-                _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [text];
+                // _writer.WriteLine(string.Join(" ", suggestedCommands));
+                return suggestedCommands;
             }
         }
 
