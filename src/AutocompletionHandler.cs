@@ -42,7 +42,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             {
                 _multipleSuggestionsSecondRun = false;
                 _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [text];
+                return [];
             }
         }
 
