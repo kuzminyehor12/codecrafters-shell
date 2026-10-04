@@ -21,8 +21,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [];
         }
 
-        if (_multipleSuggestionsSecondRun)
-            return ["Second run"];
+        // if (_multipleSuggestionsSecondRun)
+        //     return ["Second run"];
 
         var builtIns = Commands.GetBuiltInCommands();
         var executables = GetExecutables();
@@ -34,20 +34,20 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Select(cmd => cmd + " ")
             .ToArray();
             
-        if (suggestedCommands.Length > 1)
-        {
-            if (!_multipleSuggestionsSecondRun)
-            {
-                _multipleSuggestionsSecondRun = true;
-                return AlarmText(text);
-            }
-            else
-            {
-                _multipleSuggestionsSecondRun = false;
-                _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return suggestedCommands;
-            }
-        }
+        // if (suggestedCommands.Length > 1)
+        // {
+        //     if (!_multipleSuggestionsSecondRun)
+        //     {
+        //         _multipleSuggestionsSecondRun = true;
+        //         return AlarmText(text);
+        //     }
+        //     else
+        //     {
+        //         _multipleSuggestionsSecondRun = false;
+        //         _writer.WriteLine(string.Join(" ", suggestedCommands));
+        //         return suggestedCommands;
+        //     }
+        // }
 
         return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
