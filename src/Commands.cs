@@ -10,13 +10,15 @@ public class Commands
 
     public static IReadOnlyCollection<string> BuiltInCommands => [EXIT, ECHO, TYPE, PWD, CD];
 
+    private static string[] _executablePaths = [];
+
     public static IReadOnlyCollection<string> ExecutablePaths
     {
-        get => field;
+        get => _executablePaths;
         set
         {
             var pathString = Environment.GetEnvironmentVariable("PATH");
-            field = pathString?.Split(Path.PathSeparator, StringSplitOptions.TrimEntries) ?? [];
+            _executablePaths = pathString?.Split(Path.PathSeparator, StringSplitOptions.TrimEntries) ?? [];
         }
     }
 }

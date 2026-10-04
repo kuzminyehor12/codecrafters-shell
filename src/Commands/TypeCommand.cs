@@ -28,11 +28,7 @@ public class TypeCommand : ICommand
                 {
                     var fileInfo = new FileInfo(filePath);
                     var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileInfo.FullName);
-                    if (fileNameWithoutExt.Equals(argumentCmd)
-                        && fileInfo.UnixFileMode.HasFlag(
-                            UnixFileMode.OtherExecute |
-                            UnixFileMode.UserExecute |
-                            UnixFileMode.GroupExecute))
+                    if (fileNameWithoutExt.Equals(argumentCmd) && FileUtilities.IsExecutable(filePath))
                     {
                         output.StandardOutput.WriteLine($"{argumentCmd} is {fileInfo.FullName}");
                         found = true;
