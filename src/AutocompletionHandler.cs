@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ReadLine;
 
 namespace CodeCrafters.Shell;
@@ -5,7 +6,7 @@ namespace CodeCrafters.Shell;
 public class AutocompletionHandler : IAutoCompleteHandler
 {
     private readonly TextWriter _writer;
-    private bool _multipleSuggestionsCheckedOnce = false;
+    private bool _multipleSuggestionsFirstRun = false;
 
     public AutocompletionHandler(TextWriter writer)
     {
@@ -21,6 +22,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [];
         }
 
+        Debug.WriteLine(text);
         var builtIns = Commands.GetBuiltInCommands();
         var executables = GetExecutables();
 
@@ -33,16 +35,15 @@ public class AutocompletionHandler : IAutoCompleteHandler
             
         if (suggestedCommands.Length > 1)
         {
-            if (!_multipleSuggestionsCheckedOnce)
+            if (!_multipleSuggestionsFirstRun)
             {
-                _multipleSuggestionsCheckedOnce = true;
+                _multipleSuggestionsFirstRun = true;
                 return AlarmText(text);
             }
             else
             {
-                _multipleSuggestionsCheckedOnce = false;
-                // _writer.WriteLine(string.Join(" ", suggestedCommands));
-                _writer.WriteLine("Second");
+                _multipleSuggestionsFirstRun = false;
+                _writer.WriteLine(string.Join(" ", suggestedCommands));
                 return suggestedCommands;
             }
         }
