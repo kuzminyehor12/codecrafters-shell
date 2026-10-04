@@ -31,20 +31,20 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Select(cmd => cmd + " ")
             .ToArray();
             
-        if (suggestedCommands.Length > 1)
-        {
-            if (!_multipleSuggestionsSecondRun)
-            {
-                _multipleSuggestionsSecondRun = true;
-                return AlarmText(text);
-            }
-            else
-            {
-                _multipleSuggestionsSecondRun = false;
-                _writer.WriteLine(string.Join(" ", suggestedCommands));
-                return [text];
-            }
-        }
+        // if (suggestedCommands.Length > 1)
+        // {
+        //     if (!_multipleSuggestionsSecondRun)
+        //     {
+        //         _multipleSuggestionsSecondRun = true;
+        //         return AlarmText(text);
+        //     }
+        //     else
+        //     {
+        //         _multipleSuggestionsSecondRun = false;
+        //         _writer.WriteLine(string.Join(" ", suggestedCommands));
+        //         return [text];
+        //     }
+        // }
 
         return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
     }
