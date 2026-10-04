@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using ReadLine;
 
 namespace CodeCrafters.Shell;
@@ -6,7 +5,7 @@ namespace CodeCrafters.Shell;
 public class AutocompletionHandler : IAutoCompleteHandler
 {
     private readonly TextWriter _writer;
-    private bool _multipleSuggestionsFirstRun = false;
+    private static bool _multipleSuggestionsFirstRun = false;
 
     public AutocompletionHandler(TextWriter writer)
     {
@@ -21,9 +20,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
         {
             return [];
         }
-
-        if (_multipleSuggestionsFirstRun)
-            _writer.WriteLine(text);
 
         var builtIns = Commands.GetBuiltInCommands();
         var executables = GetExecutables();
