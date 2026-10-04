@@ -52,7 +52,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
     private static IEnumerable<string> GetExecutables()
     {
-        var executablePaths = Commands.ExecutablePaths;
+        var executablePaths = Commands.GetExecutablePaths();
         return executablePaths
             .Where(Directory.Exists)
             .SelectMany(Directory.EnumerateFiles)

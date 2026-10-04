@@ -14,7 +14,7 @@ public class TypeCommand : ICommand
         }
         else
         {
-            var executablePaths = Commands.ExecutablePaths;
+            var executablePaths = Commands.GetExecutablePaths();
             var found = false;
 
             foreach (var path in executablePaths)

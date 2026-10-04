@@ -40,7 +40,7 @@ public class CommandResolver
             return null;
         }
 
-        foreach (var path in Commands.ExecutablePaths)
+        foreach (var path in Commands.GetExecutablePaths())
         {
             var fullPath = Path.Combine(path, cmd);
             
