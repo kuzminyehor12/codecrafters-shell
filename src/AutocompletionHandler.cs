@@ -46,7 +46,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         //     }
         // }
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
+        return AlarmText(text);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
