@@ -18,7 +18,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
     {
         if (text.Length < 3)
         {
-            return [];
+            return [text];
         }
 
         var builtIns = Commands.GetBuiltInCommands();
@@ -36,13 +36,11 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsCheckedOnce)
             {
                 _multipleSuggestionsCheckedOnce = true;
-                _writer.WriteLine(text);
                 return AlarmText(text);
             }
             else
             {
                 _multipleSuggestionsCheckedOnce = false;
-                _writer.WriteLine(text);
                 _writer.WriteLine(string.Join(" ", suggestedCommands));
                 return [text];
             }
