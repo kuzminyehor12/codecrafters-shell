@@ -36,14 +36,14 @@ public class AutocompletionHandler : IAutoCompleteHandler
             ? [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)]
             : suggestedCommands.Length > 0
                 ? suggestedCommands
-                : AlarmText(text);
+                : [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)];
     }
 
     private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
     {
         var commandsAsString = string.Join(" ", suggestedCommands).TrimEnd();
         var prompt = _prompt + text;
-        return string.Join('\n', " " + text, commandsAsString, prompt);
+        return "Text: " + text;
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
