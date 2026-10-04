@@ -27,7 +27,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Union(executables)
             .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
             .OrderBy(cmd => cmd)
-            .Select(cmd => cmd + " ")
             .ToArray();
 
         var multipleSuggestions = suggestedCommands.Length > 1;
@@ -37,12 +36,12 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
-        return suggestedCommands.Length > 0 ? suggestedCommands : AlarmText(text);
+        return suggestedCommands.Length > 0 ? [suggestedCommands[0] + " "] : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
     {
-        var commandsAsString = string.Join(" ", suggestedCommands).TrimEnd();
+        var commandsAsString = string.Join(" ", suggestedCommands);
         var prompt = _prompt + text;
         return $" {string.Join('\n', text, commandsAsString, prompt)}";
     }
