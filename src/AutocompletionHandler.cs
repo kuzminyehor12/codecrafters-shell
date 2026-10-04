@@ -30,11 +30,11 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .Select(cmd => cmd + " ")
             .ToArray();
 
-        var multipleSuggestion = suggestedCommands.Length > 1;
+        var multipleSuggestions = suggestedCommands.Length > 1;
 
-        return multipleSuggestion 
+        return multipleSuggestions 
             ? [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)]
-            : suggestedCommands.Length > 0 
+            : suggestedCommands.Length == 1
                 ? suggestedCommands : AlarmText(text);
     }
 
@@ -42,7 +42,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
     {
         var commandsAsString = string.Join(" ", suggestedCommands).TrimEnd();
         var prompt = _prompt + text;
-        return string.Join('\n', $"sadasdasdasdas {text}", commandsAsString, prompt);
+        return string.Join('\n', $" {text}", commandsAsString, prompt);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
