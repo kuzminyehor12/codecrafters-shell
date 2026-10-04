@@ -36,12 +36,12 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsSecondRun)
             {
                 _multipleSuggestionsSecondRun = true;
-                return [..AlarmText(text), " " + text];
+                return [..AlarmText(text), " " + text + $"\n{string.Join(" ", suggestedCommands)}"];
             }
             else
             {
                 _multipleSuggestionsSecondRun = false;
-                _writer.WriteLine(string.Join(" ", suggestedCommands));
+                _writer.WriteLine();
                 return null;
             }
         }
