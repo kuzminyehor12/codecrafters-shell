@@ -36,7 +36,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
             if (!_multipleSuggestionsCheckedOnce)
             {
                 _multipleSuggestionsCheckedOnce = true;
-                _writer.WriteLine("First");
                 return AlarmText(text);
             }
             else
