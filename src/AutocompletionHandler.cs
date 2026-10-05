@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using ReadLine;
 
 namespace CodeCrafters.Shell;
@@ -33,7 +34,27 @@ public class AutocompletionHandler : IAutoCompleteHandler
         
         if (multipleSuggestions)
         {
-            return [..AlarmText(text), NextAutocompletionWithPrint(text, suggestedCommands)];
+            var hasUnderscore = text[index] == '_';
+            string matchedPrefix = string.Empty;
+
+            if (hasUnderscore)
+            {
+                var substringTillNextUnderscore = (string sub) =>
+                {
+                    var subTillUnderscore = sub.TakeWhile(ch => ch == '_');
+                    return subTillUnderscore.Count();
+                };
+
+                matchedPrefix = suggestedCommands
+                    .Select(c => c.Substring(index + 1, substringTillNextUnderscore(c.Substring(index + 1))))
+                    .Where(prefix => !string.IsNullOrWhiteSpace(prefix))
+                    .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
+                    .OrderByDescending(prefixGroup => prefixGroup.Count)
+                    .FirstOrDefault()?.Prefix ?? string.Empty;
+            }
+
+            var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [text + matchedPrefix] : AlarmText(text);
+            return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
         return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "] : AlarmText(text);
