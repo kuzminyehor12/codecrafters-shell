@@ -40,6 +40,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 return subTillUnderscore.Count();
             };
 
+            Console.WriteLine(index);
+
             var matchedPrefix = suggestedCommands
                 .Select(c => c.Substring(index, countTillNextUnderscore(c.Substring(index))))
                 .Where(prefix => !string.IsNullOrWhiteSpace(prefix))
