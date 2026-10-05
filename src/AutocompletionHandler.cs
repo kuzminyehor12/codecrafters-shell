@@ -40,7 +40,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 return subTillUnderscore.Count();
             };
 
-            Console.WriteLine(text.Substring(index, text.Length));
+            Console.WriteLine(text[index]);
 
             var matchedPrefix = suggestedCommands
                 .Select(c => c.Substring(index, countTillNextUnderscore(c.Substring(index))))
