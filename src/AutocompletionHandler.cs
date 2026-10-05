@@ -12,7 +12,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         _prompt = prompt;
     }
 
-    public char[] Separators { get; set; } = [];
+    public char[] Separators { get; set; } = ['_'];
 
     public string[] GetSuggestions(string text, int index)
     {
@@ -34,24 +34,18 @@ public class AutocompletionHandler : IAutoCompleteHandler
         
         if (multipleSuggestions)
         {
-            var hasUnderscore = text[index] == '_';
-            string matchedPrefix = string.Empty;
-
-            if (hasUnderscore)
+            var countTillNextUnderscore = (string sub) =>
             {
-                var substringTillNextUnderscore = (string sub) =>
-                {
-                    var subTillUnderscore = sub.TakeWhile(ch => ch == '_');
-                    return subTillUnderscore.Count();
-                };
+                var subTillUnderscore = sub.TakeWhile(ch => Separators.Contains(ch));
+                return subTillUnderscore.Count();
+            };
 
-                matchedPrefix = suggestedCommands
-                    .Select(c => c.Substring(index + 1, substringTillNextUnderscore(c.Substring(index + 1))))
-                    .Where(prefix => !string.IsNullOrWhiteSpace(prefix))
-                    .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
-                    .OrderByDescending(prefixGroup => prefixGroup.Count)
-                    .FirstOrDefault()?.Prefix ?? string.Empty;
-            }
+            var matchedPrefix = suggestedCommands
+                .Select(c => c.Substring(index, countTillNextUnderscore(c.Substring(index))))
+                .Where(prefix => !string.IsNullOrWhiteSpace(prefix))
+                .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
+                .OrderByDescending(prefixGroup => prefixGroup.Count)
+                .FirstOrDefault()?.Prefix ?? string.Empty;
 
             var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [text + matchedPrefix] : AlarmText(text);
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
