@@ -30,25 +30,25 @@ public class AutocompletionHandler : IAutoCompleteHandler
             .OrderBy(cmd => cmd)
             .ToArray();
 
+        int CountTillNextSeparator(string sub)
+        {
+            var subTillSeparator = sub.TakeWhile(ch => !Separators.Contains(ch));
+            return subTillSeparator.Count();
+        }
+
+        var matchedPrefix = suggestedCommands
+            .Where(c => c.Length >= index + 1)
+            .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
+            .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
+            .OrderByDescending(prefixGroup => prefixGroup.Count)
+            .FirstOrDefault()?.Prefix ?? string.Empty;
+
+        var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [matchedPrefix] : AlarmText(text);
+
         var multipleSuggestions = suggestedCommands.Length > 1;
-        
+
         if (multipleSuggestions)
         {
-            int CountTillNextSeparator(string cmd, string sub)
-            {
-                var subTillSeparator = sub.TakeWhile(ch => !Separators.Contains(ch));
-                // Console.WriteLine("Command " + cmd + " Sub " + sub + " Count " + subTillSeparator.Count());
-                return subTillSeparator.Count();
-            };
-
-            var matchedPrefix = suggestedCommands
-                .Where(c => c.Length >= index + 1)
-                .Select(c => c.Substring(index, CountTillNextSeparator(c, c.Substring(index))))
-                .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
-                .OrderByDescending(prefixGroup => prefixGroup.Count)
-                .FirstOrDefault()?.Prefix ?? string.Empty;
-
-            var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [matchedPrefix] : AlarmText(text);
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
