@@ -34,16 +34,15 @@ public class AutocompletionHandler : IAutoCompleteHandler
         
         if (multipleSuggestions)
         {
-            var countTillNextUnderscore = (string sub) =>
+            int CountTillNextSeparator(string sub)
             {
-                var subTillUnderscore = sub.TakeWhile(ch => Separators.Contains(ch));
-                return subTillUnderscore.Count();
+                var subTillSeparator = sub.TakeWhile(ch => Separators.Contains(ch) || ch == null);
+                return subTillSeparator.Count();
             };
 
-            Console.WriteLine(text[index]);
-
             var matchedPrefix = suggestedCommands
-                .Select(c => c.Substring(index, countTillNextUnderscore(c.Substring(index))))
+                .Where(c => c.Length >= index + 1)
+                .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
                 .Where(prefix => !string.IsNullOrWhiteSpace(prefix))
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
