@@ -40,16 +40,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 // Console.WriteLine("Command " + cmd + " Sub " + sub + " Count " + subTillSeparator.Count());
                 return subTillSeparator.Count();
             };
-            
-            var temp = suggestedCommands
-                .Where(c => c.Length >= index + 1)
-                .Select(c => c.Substring(index, CountTillNextSeparator(c, c.Substring(index))));
-
-            Console.WriteLine(temp.Count());
-            foreach (var item in temp)
-            {
-                Console.WriteLine(item);
-            }
 
             var matchedPrefix = suggestedCommands
                 .Where(c => c.Length >= index + 1)
