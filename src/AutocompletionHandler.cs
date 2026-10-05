@@ -48,7 +48,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
                 .FirstOrDefault()?.Prefix ?? string.Empty;
 
-            var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [text + matchedPrefix] : AlarmText(text);
+            var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [matchedPrefix] : AlarmText(text);
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
