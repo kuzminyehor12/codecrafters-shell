@@ -37,6 +37,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             int CountTillNextSeparator(string sub)
             {
                 var subTillSeparator = sub.TakeWhile(ch => Separators.Contains(ch) || ch == null);
+                Console.WriteLine(subTillSeparator);
                 return subTillSeparator.Count();
             };
 
@@ -47,8 +48,6 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
                 .FirstOrDefault()?.Prefix ?? string.Empty;
-
-            Console.WriteLine(matchedPrefix);
 
             var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [text + matchedPrefix] : AlarmText(text);
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
