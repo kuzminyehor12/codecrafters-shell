@@ -48,6 +48,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
                 .FirstOrDefault()?.Prefix ?? string.Empty;
 
+            Console.WriteLine(matchedPrefix);
+
             var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [text + matchedPrefix] : AlarmText(text);
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
