@@ -45,6 +45,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 .Where(c => c.Length >= index + 1)
                 .Select(c => c.Substring(index, CountTillNextSeparator(c, c.Substring(index))));
 
+            Console.WriteLine(temp.Count());
             foreach (var item in temp)
             {
                 Console.WriteLine(item);
