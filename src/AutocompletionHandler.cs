@@ -37,10 +37,19 @@ public class AutocompletionHandler : IAutoCompleteHandler
             int CountTillNextSeparator(string cmd, string sub)
             {
                 var subTillSeparator = sub.TakeWhile(ch => !Separators.Contains(ch));
-                Console.WriteLine("Command " + cmd + " Sub " + sub + " Count " + subTillSeparator.Count());
+                // Console.WriteLine("Command " + cmd + " Sub " + sub + " Count " + subTillSeparator.Count());
                 return subTillSeparator.Count();
             };
             
+            var temp = suggestedCommands
+                .Where(c => c.Length >= index + 1)
+                .Select(c => c.Substring(index, CountTillNextSeparator(c, c.Substring(index))));
+
+            foreach (var item in temp)
+            {
+                Console.WriteLine(item);
+            }
+
             var matchedPrefix = suggestedCommands
                 .Where(c => c.Length >= index + 1)
                 .Select(c => c.Substring(index, CountTillNextSeparator(c, c.Substring(index))))
