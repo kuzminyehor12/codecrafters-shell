@@ -41,6 +41,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 return subTillSeparator.Count();
             };
 
+            Console.WriteLine("Commands " + string.Join(" ", suggestedCommands));
+            
             var matchedPrefix = suggestedCommands
                 .Where(c => c.Length >= index + 1)
                 .Select(c => c.Substring(index, CountTillNextSeparator(c, c.Substring(index))))
@@ -48,7 +50,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
                 .FirstOrDefault()?.Prefix ?? string.Empty;
 
-            var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [matchedPrefix] : AlarmText(text);
+            var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [text + matchedPrefix] : AlarmText(text);
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
