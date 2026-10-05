@@ -43,7 +43,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
             var matchedPrefix = suggestedCommands
                 .Where(c => c.Length >= index + 1)
-                .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
+                .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index, c.Length))))
                 .Where(prefix => !string.IsNullOrWhiteSpace(prefix))
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
