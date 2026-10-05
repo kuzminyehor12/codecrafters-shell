@@ -1,4 +1,5 @@
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 using ReadLine;
 
 namespace CodeCrafters.Shell;
@@ -52,7 +53,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
-        return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "] : AlarmText(text);
+        return suggestedCommands.Length > 0 ? suggestionResult : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
