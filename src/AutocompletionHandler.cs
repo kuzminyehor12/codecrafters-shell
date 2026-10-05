@@ -37,7 +37,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             int CountTillNextSeparator(string cmd, string sub)
             {
                 var subTillSeparator = sub.TakeWhile(ch => !Separators.Contains(ch));
-                Console.WriteLine("Command " + cmd + " Sub " + sub + " Count " + subTillSeparator.Count());
+                // Console.WriteLine("Command " + cmd + " Sub " + sub + " Count " + subTillSeparator.Count());
                 return subTillSeparator.Count();
             };
 
