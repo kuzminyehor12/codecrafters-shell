@@ -22,50 +22,56 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return null;
         }
 
-        var builtIns = Commands.BuiltInCommands;
-        var executables = GetExecutables();
+        try
+        {
+            var builtIns = Commands.BuiltInCommands;
+            var executables = GetExecutables();
+            var prefixMode = Separators.Contains(text[index - 1]);
 
-        Console.WriteLine(text[index - 1]);
-        var prefixMode = Separators.Contains(text[index - 1]);
-
-        string[] suggestedCommands = builtIns
+            string[] suggestedCommands = builtIns
             .Union(executables)
             .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
             .OrderBy(cmd => cmd)
             .ToArray();
 
-        int CountTillNextSeparator(string sub)
-        {
-            var subTillSeparator = sub.TakeWhile(ch => !Separators.Contains(ch));
-            return subTillSeparator.Count();
+            int CountTillNextSeparator(string sub)
+            {
+                var subTillSeparator = sub.TakeWhile(ch => !Separators.Contains(ch));
+                return subTillSeparator.Count();
+            }
+
+            var matchedPrefixGroup =
+                suggestedCommands
+                    .Where(c => c.Length >= index + 1)
+                    .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
+                    .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
+                    .OrderByDescending(prefixGroup => prefixGroup.Count)
+                    .FirstOrDefault();
+
+            var multipleSuggestions = suggestedCommands.Length > 1;
+
+            var suggestedPrefix = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
+                ? [matchedPrefixGroup.Prefix]
+                : new string[] { "\a" };
+
+            if (multipleSuggestions)
+            {
+                var firstItem = prefixMode ? suggestedPrefix : AlarmText(text);
+                return [.. firstItem, NextAutocompletionWithPrint(text, index, suggestedCommands)];
+            }
+
+            if (prefixMode)
+            {
+                return suggestedPrefix.Length > 0 ? [$"{suggestedPrefix[0]} "] : AlarmText(text);
+            }
+
+            return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "] : AlarmText(text);
         }
-
-        var matchedPrefixGroup =
-            suggestedCommands
-                .Where(c => c.Length >= index + 1)
-                .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
-                .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
-                .OrderByDescending(prefixGroup => prefixGroup.Count)
-                .FirstOrDefault();
-
-        var multipleSuggestions = suggestedCommands.Length > 1;
-        
-        var suggestedPrefix = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
-            ? [matchedPrefixGroup.Prefix] 
-            : new string[] { "\a" };
-
-        if (multipleSuggestions)
+        catch
         {
-            var firstItem = prefixMode ? suggestedPrefix : AlarmText(text);
-            return [..firstItem, NextAutocompletionWithPrint(text, index, suggestedCommands)];
+            Console.WriteLine("Index " + index + " Text " + text);
+            return null;
         }
-
-        if (prefixMode)
-        {
-            return suggestedPrefix.Length > 0 ? [$"{suggestedPrefix[0]} "] : AlarmText(text);
-        }
-
-        return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "] : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, int index, string[] suggestedCommands)
