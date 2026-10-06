@@ -55,7 +55,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         if (multipleSuggestions)
         {
-            return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
+            return [..suggestionResult, NextAutocompletionWithPrint(suggestionResult[0], suggestedCommands)];
         }
 
         return suggestionResult.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
