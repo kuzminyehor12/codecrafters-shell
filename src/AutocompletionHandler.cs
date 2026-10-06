@@ -44,7 +44,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
                 .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
-                .FirstOrDefault(prefixGroup => prefixGroup.Count > 1)?.Prefix ?? string.Empty
+                .FirstOrDefault()?.Prefix ?? string.Empty
             : string.Empty;
 
         var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [matchedPrefix] : AlarmText(text);
