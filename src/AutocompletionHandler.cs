@@ -26,7 +26,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         {
             var builtIns = Commands.BuiltInCommands;
             var executables = GetExecutables();
-            var prefixMode = Separators.Contains(text[index - 1]);
+            var prefixMode = index != 0;
 
             string[] suggestedCommands = builtIns
             .Union(executables)
