@@ -55,7 +55,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         if (multipleSuggestions)
         {
-            return [..suggestionResult, NextAutocompletionWithPrint(suggestionResult[0], suggestedCommands)];
+            return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
         }
 
         return suggestionResult.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
@@ -65,7 +65,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
     {
         var commandsAsString = string.Join(" ", suggestedCommands);
         var prompt = _prompt + text;
-        return string.Join('\n', $" {text}", commandsAsString, prompt);
+        return string.Join('\n', "\n", commandsAsString, prompt);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
