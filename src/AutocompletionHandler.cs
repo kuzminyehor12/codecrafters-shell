@@ -37,21 +37,21 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return subTillSeparator.Count();
         }
 
-        var matchedPrefixGroup =
-            suggestedCommands
+        var multipleSuggestions = suggestedCommands.Length > 1;
+
+        var matchedPrefixGroup = multipleSuggestions 
+            ? suggestedCommands
                 .Where(c => c.Length >= index + 1)
                 .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
-                .FirstOrDefault();
-
-        var multipleSuggestions = suggestedCommands.Length > 1;
+                .FirstOrDefault()
+            : new { Prefix = suggestedCommands[0], Count = 1};
         
-        var suggestionResult = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
-            ? [matchedPrefixGroup.Prefix] 
-            : new string[] { "\a" };
-
-        // Console.WriteLine("Suggestion result " + suggestionResult);
+        var suggestionResult = matchedPrefixGroup is not null 
+            && (!(multipleSuggestions && matchedPrefixGroup.Count == 1) || !multipleSuggestions)
+                ? [matchedPrefixGroup.Prefix] 
+                : new string[] { "\a" };
 
         if (multipleSuggestions)
         {
