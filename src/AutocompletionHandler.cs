@@ -55,17 +55,17 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         if (multipleSuggestions)
         {
-            return [..suggestionResult, NextAutocompletionWithPrint(text, suggestedCommands)];
+            return [..suggestionResult, NextAutocompletionWithPrint(text, index, suggestedCommands)];
         }
 
         return suggestionResult.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
     }
 
-    private string NextAutocompletionWithPrint(string text, string[] suggestedCommands)
+    private string NextAutocompletionWithPrint(string text, int index, string[] suggestedCommands)
     {
         var commandsAsString = string.Join(" ", suggestedCommands);
         var prompt = _prompt + text;
-        return string.Join('\n', commandsAsString, prompt);
+        return string.Join('\n', text[index - 1], commandsAsString, prompt);
     }
 
     private static string[] AlarmText(string text) => [text + "\a"];
