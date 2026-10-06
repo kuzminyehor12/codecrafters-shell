@@ -51,7 +51,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             ? [matchedPrefixGroup.Prefix] 
             : AlarmText(text);
 
-        Console.WriteLine("Suggestion result " + suggestionResult);
+        // Console.WriteLine("Suggestion result " + suggestionResult);
 
         if (multipleSuggestions)
         {
