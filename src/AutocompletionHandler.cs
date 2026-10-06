@@ -21,8 +21,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         {
             return null;
         }
-
-        var prefixMode = Separators.Contains(text[index - 1]);
+        
         var builtIns = Commands.BuiltInCommands;
         var executables = GetExecutables();
 
@@ -38,18 +37,19 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return subTillSeparator.Count();
         }
 
-        var matchedPrefix = prefixMode 
-            ? suggestedCommands
+        var matchedPrefixGroup =
+            suggestedCommands
                 .Where(c => c.Length >= index + 1)
                 .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
-                .FirstOrDefault()?.Prefix ?? string.Empty
-            : string.Empty;
-
-        var suggestionResult = !string.IsNullOrEmpty(matchedPrefix) ? [matchedPrefix] : AlarmText(text);
+                .FirstOrDefault();
 
         var multipleSuggestions = suggestedCommands.Length > 1;
+        
+        var suggestionResult = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
+            ? [matchedPrefixGroup.Prefix] 
+            : AlarmText(text);
 
         if (multipleSuggestions)
         {
