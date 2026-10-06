@@ -21,7 +21,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         {
             return null;
         }
-        
+
         var builtIns = Commands.BuiltInCommands;
         var executables = GetExecutables();
 
@@ -50,6 +50,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
         var suggestionResult = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
             ? [matchedPrefixGroup.Prefix] 
             : AlarmText(text);
+
+        Console.WriteLine("Suggestion result " + suggestionResult);
 
         if (multipleSuggestions)
         {
