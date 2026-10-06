@@ -37,28 +37,28 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return subTillSeparator.Count();
         }
 
-        var multipleSuggestions = suggestedCommands.Length > 1;
-
-        var matchedPrefixGroup = multipleSuggestions 
-            ? suggestedCommands
+        var matchedPrefixGroup =
+            suggestedCommands
                 .Where(c => c.Length >= index + 1)
                 .Select(c => c.Substring(index, CountTillNextSeparator(c.Substring(index))))
                 .GroupBy(prefix => prefix, (key, group) => new { Prefix = key, Count = group.Count() })
                 .OrderByDescending(prefixGroup => prefixGroup.Count)
-                .FirstOrDefault()
-            : new { Prefix = suggestedCommands[0], Count = 1};
+                .FirstOrDefault();
+
+        var multipleSuggestions = suggestedCommands.Length > 1;
         
-        var suggestionResult = matchedPrefixGroup is not null 
-            && (!(multipleSuggestions && matchedPrefixGroup.Count == 1) || !multipleSuggestions)
-                ? [matchedPrefixGroup.Prefix] 
-                : new string[] { "\a" };
+        var suggestionResult = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
+            ? [matchedPrefixGroup.Prefix] 
+            : new string[] { "\a" };
+
+        // Console.WriteLine("Suggestion result " + suggestionResult);
 
         if (multipleSuggestions)
         {
             return [..suggestionResult, NextAutocompletionWithPrint(text, index, suggestedCommands)];
         }
 
-        return suggestedCommands.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
+        return suggestionResult.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, int index, string[] suggestedCommands)
