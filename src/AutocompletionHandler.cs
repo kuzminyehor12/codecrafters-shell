@@ -58,7 +58,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return [..suggestionResult, NextAutocompletionWithPrint(text, index, suggestedCommands)];
         }
 
-        return suggestionResult.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
+        return suggestedCommands.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, int index, string[] suggestedCommands)
