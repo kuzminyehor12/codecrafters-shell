@@ -25,6 +25,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
         var builtIns = Commands.BuiltInCommands;
         var executables = GetExecutables();
 
+        Console.WriteLine(text[index - 1]);
         var prefixMode = Separators.Contains(text[index - 1]);
 
         string[] suggestedCommands = builtIns
@@ -64,7 +65,7 @@ public class AutocompletionHandler : IAutoCompleteHandler
             return suggestedPrefix.Length > 0 ? [$"{suggestedPrefix[0]} "] : AlarmText(text);
         }
 
-        return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "]  : AlarmText(text);
+        return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "] : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, int index, string[] suggestedCommands)
