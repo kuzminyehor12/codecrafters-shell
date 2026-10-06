@@ -25,6 +25,8 @@ public class AutocompletionHandler : IAutoCompleteHandler
         var builtIns = Commands.BuiltInCommands;
         var executables = GetExecutables();
 
+        var prefixMode = Separators.Contains(text[index - 1]);
+
         string[] suggestedCommands = builtIns
             .Union(executables)
             .Where(cmd => !string.IsNullOrWhiteSpace(cmd) && cmd.StartsWith(text))
@@ -47,18 +49,22 @@ public class AutocompletionHandler : IAutoCompleteHandler
 
         var multipleSuggestions = suggestedCommands.Length > 1;
         
-        var suggestionResult = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
+        var suggestedPrefix = matchedPrefixGroup is not null && !(multipleSuggestions && matchedPrefixGroup.Count == 1)
             ? [matchedPrefixGroup.Prefix] 
             : new string[] { "\a" };
 
-        // Console.WriteLine("Suggestion result " + suggestionResult);
-
         if (multipleSuggestions)
         {
-            return [..suggestionResult, NextAutocompletionWithPrint(text, index, suggestedCommands)];
+            var firstItem = prefixMode ? suggestedPrefix : AlarmText(text);
+            return [..firstItem, NextAutocompletionWithPrint(text, index, suggestedCommands)];
         }
 
-        return suggestionResult.Length > 0 ? [$"{suggestionResult[0]} "] : AlarmText(text);
+        if (prefixMode)
+        {
+            return suggestedPrefix.Length > 0 ? [$"{suggestedPrefix[0]} "] : AlarmText(text);
+        }
+
+        return suggestedCommands.Length > 0 ? [$"{suggestedCommands[0]} "]  : AlarmText(text);
     }
 
     private string NextAutocompletionWithPrint(string text, int index, string[] suggestedCommands)
