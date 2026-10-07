@@ -17,15 +17,13 @@ public class ExecutableCommand : ICommand
         var output = Output.Create(args);
         var processArgs = CommandArguments(isBackground ? args[..(args.Length - 1)] : args, output);
 
-        var isBackgroundOrRedirect = !isBackground || (output.OutRedirectionIndex == -1 && output.ErrRedirectionIndex == -1);
-
         var processInfo = new ProcessStartInfo
         {
             FileName = Path.GetFileName(ExecutableFile),
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            UseShellExecute = !isBackgroundOrRedirect,
-            CreateNoWindow = isBackgroundOrRedirect
+            UseShellExecute = false,
+            CreateNoWindow = true
         };
 
         foreach (var arg in processArgs)
@@ -42,15 +40,15 @@ public class ExecutableCommand : ICommand
         if (isBackground)
         {
             output.StandardOutput.WriteLine($"[1] {process.Id}");
-            process.Exited += (sender, args) =>
-            {
-                var stdoutTask = (sender as Process)?.StandardOutput.ReadToEndAsync();
-                var stderrTask = (sender as Process)?.StandardError.ReadToEndAsync();
-                Task.WhenAll(stdoutTask ?? Task.CompletedTask, stderrTask ?? Task.CompletedTask);
-                output.StandardOutput.Write(stdoutTask?.Result);
-                output.StandardError.Write(stderrTask?.Result);
-                output.Flush();
-            };
+            // process.Exited += (sender, args) =>
+            // {
+            //     var stdoutTask = (sender as Process)?.StandardOutput.ReadToEndAsync();
+            //     var stderrTask = (sender as Process)?.StandardError.ReadToEndAsync();
+            //     Task.WhenAll(stdoutTask ?? Task.CompletedTask, stderrTask ?? Task.CompletedTask);
+            //     output.StandardOutput.Write(stdoutTask?.Result);
+            //     output.StandardError.Write(stderrTask?.Result);
+            //     output.Flush();
+            // };
             return;
         }
 
