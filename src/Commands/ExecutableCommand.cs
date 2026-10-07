@@ -39,20 +39,20 @@ public class ExecutableCommand : ICommand
             return;
         }
 
-        if (isBackground)
-        {
-            output.StandardOutput.WriteLine($"[1] {process.Id}");
-            process.Exited += (sender, args) =>
-            {
-                var stdoutTask = (sender as Process)?.StandardOutput.ReadToEndAsync();
-                var stderrTask = (sender as Process)?.StandardError.ReadToEndAsync();
-                Task.WhenAll(stdoutTask ?? Task.CompletedTask, stderrTask ?? Task.CompletedTask);
-                output.StandardOutput.Write(stdoutTask?.Result);
-                output.StandardError.Write(stderrTask?.Result);
-                output.Flush();
-            };
-            return;
-        }
+        // if (isBackground)
+        // {
+        //     output.StandardOutput.WriteLine($"[1] {process.Id}");
+        //     process.Exited += (sender, args) =>
+        //     {
+        //         var stdoutTask = (sender as Process)?.StandardOutput.ReadToEndAsync();
+        //         var stderrTask = (sender as Process)?.StandardError.ReadToEndAsync();
+        //         Task.WhenAll(stdoutTask ?? Task.CompletedTask, stderrTask ?? Task.CompletedTask);
+        //         output.StandardOutput.Write(stdoutTask?.Result);
+        //         output.StandardError.Write(stderrTask?.Result);
+        //         output.Flush();
+        //     };
+        //     return;
+        // }
 
         process.WaitForExit();
         
