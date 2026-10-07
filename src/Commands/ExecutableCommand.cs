@@ -17,13 +17,15 @@ public class ExecutableCommand : ICommand
         var output = Output.Create(args);
         var processArgs = CommandArguments(isBackground ? args[..(args.Length - 1)] : args, output);
 
+        var isBackgroundOrRedirect = !isBackground || (output.OutRedirectionIndex == -1 && output.ErrRedirectionIndex == -1);
+
         var processInfo = new ProcessStartInfo
         {
             FileName = Path.GetFileName(ExecutableFile),
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            UseShellExecute = !isBackground || (output.OutRedirectionIndex == -1 && output.ErrRedirectionIndex == -1),
-            CreateNoWindow = isBackground
+            UseShellExecute = !isBackgroundOrRedirect,
+            CreateNoWindow = isBackgroundOrRedirect
         };
 
         foreach (var arg in processArgs)
