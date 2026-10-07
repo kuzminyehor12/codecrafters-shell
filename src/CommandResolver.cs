@@ -29,6 +29,7 @@ public class CommandResolver
             Commands.TYPE => new TypeCommand(),
             Commands.PWD => new PwdCommand(),
             Commands.CD => new CdCommand(),
+            Commands.JOBS => new JobsCommand(),
             _ => null
         };
     }

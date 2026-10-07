@@ -7,8 +7,9 @@ public class Commands
     public const string TYPE = "type";
     public const string PWD = "pwd";
     public const string CD = "cd";
+    public const string JOBS = "jobs";
 
-    public static IReadOnlyCollection<string> BuiltInCommands => [EXIT, ECHO, TYPE, PWD, CD];
+    public static IReadOnlyCollection<string> BuiltInCommands => [EXIT, ECHO, TYPE, PWD, CD, JOBS];
 
     public static string[] GetExecutablePaths()
     {
