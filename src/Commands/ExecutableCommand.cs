@@ -22,7 +22,7 @@ public class ExecutableCommand : ICommand
             FileName = Path.GetFileName(ExecutableFile),
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            UseShellExecute = !isBackground,
+            UseShellExecute = !isBackground || (output.OutRedirectionIndex == -1 && output.ErrRedirectionIndex == -1),
             CreateNoWindow = isBackground
         };
 
