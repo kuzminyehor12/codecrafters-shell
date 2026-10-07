@@ -14,7 +14,7 @@ class Program
             var tokens = input?.Split(' ');
 
             var cmdToken = tokens?.Length > 0 ? tokens[0] : input;
-            var args = tokens?.Length > 1 ? tokens[1..] : [string.Empty]; 
+            var args = tokens?.Length > 1 ? tokens[1..] : [string.Empty];
 
             var cmd = CommandResolver.Resolve(cmdToken);
 

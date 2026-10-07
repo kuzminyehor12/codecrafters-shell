@@ -13,14 +13,17 @@ public class ExecutableCommand : ICommand
 
     public void Execute(string[] args)
     {
+        var isBackground = args[args.Length - 1] == "&";
         var output = Output.Create(args);
-        var processArgs = CommandArguments(args, output);
+        var processArgs = CommandArguments(isBackground ? args[..(args.Length - 1)] : args, output);
 
         var processInfo = new ProcessStartInfo
         {
             FileName = Path.GetFileName(ExecutableFile),
             RedirectStandardOutput = true,
             RedirectStandardError = true,
+            UseShellExecute = !isBackground,
+            CreateNoWindow = isBackground
         };
 
         foreach (var arg in processArgs)
@@ -34,10 +37,16 @@ public class ExecutableCommand : ICommand
             return;
         }
 
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
+        if (isBackground)
+        {
+            output.StandardOutput.WriteLine($"[1] {process.Id}");
+            return;
+        }
 
         process.WaitForExit();
+        
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
 
         Task.WhenAll(stdoutTask, stderrTask);
 
